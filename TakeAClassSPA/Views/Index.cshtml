@@ -1,0 +1,15 @@
+﻿@{
+    PageData["title"] = "Take A Class";
+}
+<h1>Take A Class</h1>
+<div ng-controller="HomeCtrl">
+
+    <ul>
+        <li ng-repeat="ScheduledClass in ScheduledClasses">
+            {{ScheduledClass.ClassName}}
+            <br>{{ScheduledClass.ClassDate}}
+            <br>{{ScheduledClass.Instructor}}
+        </li>
+    </ul>
+
+</div>
