@@ -160,8 +160,6 @@
       <DependentUpon>variables.css</DependentUpon>
     </Content>
     <Content Include="Global.asax" />
-    <Content Include="js\app\app.js" />
-    <Content Include="js\app\controllers.js" />
     <Content Include="Scripts\controllers.js" />
     <Content Include="Scripts\controllers.spec.js">
       <DependentUpon>controllers.js</DependentUpon>

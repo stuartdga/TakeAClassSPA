@@ -6,26 +6,30 @@
 angular.module('app.controllers', [])
 
     // Path: /
-    .controller('HomeCtrl', ['$scope', '$location', '$window', function ($scope, $location, $window) {
+    .controller('HomeCtrl', ['$scope', '$location', '$window', '$http',
+        function ($scope, $location, $window, $http) {
         $scope.$root.title = 'AngularJS SPA Template for Visual Studio';
         $scope.$on('$viewContentLoaded', function () {
             $window.ga('send', 'pageview', { 'page': $location.path(), 'title': $scope.$root.title });
+            $http.get('api/ScheduledClass').success(function (data) {
+                $scope.ScheduledClasses = data;
+                }
+            )
         });
-        $scope.ScheduledClasses = [
-          {
-              'ClassID': 1,
-              'ClassName': 'Class 1',
-              'ClassDate': '2014-10-10 10:00 AM',
-              'Instructor': 'Eric'
-          },
-          {
-              'ClassID': 2,
-              'ClassName': 'Class 2',
-              'ClassDate': '2014-10-10 11:00 AM',
-              'Instructor': 'David'
-          }
-        ];
 
+        $scope.formatClassDate = function (classDate) {
+            var date = isoDateReviver(classDate);
+            date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+            var format = "AM";
+            var hour = date.getHours();
+            var min = date.getMinutes();
+            if (hour > 11) { format = "PM"; }
+            if (hour > 12) { hour = hour - 12; }
+            if (hour == 0) { hour = 12; }
+            if (min < 10) { min = "0" + min; }
+            var day = dayOfWeekString(date.getDay());
+            return (day + ", " + (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + hour + ":" + min + " " + format);
+        }
     }])
 
     // Path: /about
@@ -57,3 +61,17 @@ angular.module('app.controllers', [])
         });
     }]);
 
+function isoDateReviver(value) {
+    if (typeof value === 'string') {
+        var a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)(?:([\+-])(\d{2})\:(\d{2}))?Z?$/.exec(value);
+        if (a) {
+            var utcMilliseconds = Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6]);
+            return new Date(utcMilliseconds);
+        }
+    }
+    return value;
+}
+
+function dayOfWeekString(day) {
+    return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][day];
+}

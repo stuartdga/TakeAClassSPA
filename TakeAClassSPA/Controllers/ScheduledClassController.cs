@@ -45,6 +45,7 @@ namespace App.TakeAClassSPA.Controllers
             scheduledClass.ClassID = 1;
             scheduledClass.ClassName = "Class 1";
             scheduledClass.ClassDate = Convert.ToDateTime("10/1/2014 10:00:00 AM");
+            scheduledClass.Instructor = "Eric";
             scheduledClass.ClassDescription = "This is class 1.";
             var students = new List<Student>();
             var student1 = new Student();
